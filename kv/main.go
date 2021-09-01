@@ -29,6 +29,7 @@ var (
 )
 
 func main() {
+	// 设置config
 	flag.Parse()
 	conf := config.NewDefaultConfig()
 	if *schedulerAddr != "" {
@@ -44,14 +45,16 @@ func main() {
 		conf.LogLevel = *logLevel
 	}
 
+	//设置Log
 	log.SetLevelByString(conf.LogLevel)
 	log.SetFlags(log.Ldate | log.Ltime | log.Lmicroseconds | log.Lshortfile)
 	log.Infof("Server started with conf %+v", conf)
 
-	var storage storage.Storage
-	if conf.Raft {
+	//获取一个storage
+	var storage storage.Storage // 定义了一个底层存储服务
+	if conf.Raft {              //如何使用了raft，那么启用分布式的存储
 		storage = raft_storage.NewRaftStorage(conf)
-	} else {
+	} else { //如果没有使用raft,那么启动单例存储
 		storage = standalone_storage.NewStandAloneStorage(conf)
 	}
 	if err := storage.Start(); err != nil {

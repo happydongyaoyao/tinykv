@@ -1,6 +1,8 @@
 package standalone_storage
 
 import (
+	"github.com/Connor1996/badger"
+	badger "github.com/dgraph-io/badger/v3"
 	"github.com/pingcap-incubator/tinykv/kv/config"
 	"github.com/pingcap-incubator/tinykv/kv/storage"
 	"github.com/pingcap-incubator/tinykv/proto/pkg/kvrpcpb"
@@ -13,8 +15,8 @@ type StandAloneStorage struct {
 }
 
 func NewStandAloneStorage(conf *config.Config) *StandAloneStorage {
-	// Your Code Here (1).
-	return nil
+	db, err := badger.Open(badger.DefaultOptions("/tmp/badger"))
+	return db
 }
 
 func (s *StandAloneStorage) Start() error {
